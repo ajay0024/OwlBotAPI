@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>OwlBot API</title>
+  {% load static %}
+</head>
+
+<body>
+  <link rel="stylesheet" href="{%static 'mycss.css'%}">
+  <div id="cover">
+    <form method="get" action="">
+      <div class="tb">
+        <div class="td">
+          <input type="text" placeholder="Search" id="word" required>
+        </div>
+        <div class="td" id="s-cover">
+          <button type="button" id="btn">
+            <div id="s-circle"></div>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  {% if not definitions%}
+  <div class="card">
+    <div class="text">
+      <div class="definition">
+        No definition available for this word
+      </div>
+    </div>
+  </div>
+  {% endif%}
+  {% for def in definitions reversed %}
+  <div class="card">
+    <div class="image_container">
+      <img src={{def.image_url|default:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/450px-No_image_available.svg.png"}} class="word_image">
+      <div class="type_container light-text">
+        {{def.type|title}}
+      </div>
+    </div>
+    <div class="text">
+      <div class="definition">
+        <span>{{def.emoji|default:""}} </span>{{def.definition|capfirst }}
+      </div>
+      <div class="light-text example">
+        "{{def.example|capfirst}}"
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+
+</body>
+<script>
+  document.getElementById("btn").addEventListener("click", function() {
+    var word = document.getElementById("word").value;
+    request = new XMLHttpRequest();
+    window.location.replace("http://127.0.0.1:8000/word/" + word);
+  })
+  document.getElementById("word")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+      var word = document.getElementById("word").value;
+      request = new XMLHttpRequest();
+      window.location.replace("http://127.0.0.1:8000/word/" + word);
+    }
+});
+</script>
+
+</html>
